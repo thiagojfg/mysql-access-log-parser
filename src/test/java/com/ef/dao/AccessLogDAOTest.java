@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
@@ -54,6 +55,7 @@ public class AccessLogDAOTest {
     }
 
     @Test
+    @Ignore
     public void persistLogs() throws IOException {
 
         List<AccessLog> logs = accessLogFileLoader.load();
