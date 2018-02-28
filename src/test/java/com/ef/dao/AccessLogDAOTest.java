@@ -15,20 +15,20 @@ import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author Thiago
  */
-public class AccessLogMySQLDAOTest {
+public class AccessLogDAOTest {
 
     private static Connection connection;
 
-    private AccessLogMySQLDAO accessLogMySQLDAO;
+    private AccessLogDAO accessLogMySQLDAO;
 
     private AccessLogFileLoader accessLogFileLoader;
 
@@ -45,7 +45,7 @@ public class AccessLogMySQLDAOTest {
     @Before
     public void setUp() {
         accessLogFileLoader = new AccessLogFileLoader(new File("src/test/resources/access.log"));
-        accessLogMySQLDAO = new AccessLogMySQLDAO(connection);
+        accessLogMySQLDAO = new AccessLogDAO(connection);
     }
 
     @After
@@ -54,9 +54,11 @@ public class AccessLogMySQLDAOTest {
     }
 
     @Test
-    public void testPersist() throws IOException {
+    public void persistLogs() throws IOException {
 
         List<AccessLog> logs = accessLogFileLoader.load();
+
+        Assert.assertFalse(logs.isEmpty());
 
         accessLogMySQLDAO.persist(logs);
     }

@@ -1,5 +1,6 @@
 package com.ef;
 
+import com.ef.model.Duration;
 import java.io.File;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -14,7 +15,7 @@ public class ConfigTest {
         assertNotNull(config);
         assertNotNull(config.getAccessLog());
         assertNotNull(config.getStartDate());
-        assertEquals(Config.Duration.HOURLY, config.getDuration());
+        assertEquals(Duration.HOURLY, config.getDuration());
         assertEquals(Long.valueOf(100), Long.valueOf(config.getThreshold()));
     }
 
@@ -24,7 +25,7 @@ public class ConfigTest {
 
         args[0] = "--accesslog=" + new File("src/test/resources/access.log").getAbsolutePath();
         args[1] = "--startDate=2017-01-01.13:00:00";
-        args[2] = "--duration=hourly";
+        args[2] = "--duration=daily";
         args[3] = "--threshold=100";
 
         return args;

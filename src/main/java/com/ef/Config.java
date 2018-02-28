@@ -1,14 +1,13 @@
 package com.ef;
 
+import com.ef.model.Duration;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class Config {
 
@@ -17,17 +16,17 @@ public final class Config {
     private static final String DURATION = "--duration";
     private static final String THRESHOLD = "--threshold";
 
-    private static final String DATE_PATTERN = "YYYY-MM-DD'.'HH:mm:ss";
+    private static final String DATE_PATTERN = "yyyy-MM-DD'.'HH:mm:ss";
 
     private final File accessLog;
-    private final Date startDate;
+    private final LocalDateTime startDate;
     private final Duration duration;
     private final Integer threshold;
 
     static final Config parse(String[] args) throws ConfigFailedException {
 
         File accessLog = null;
-        Date startDate = null;
+        LocalDateTime startDate = null;
         Duration duration = null;
         Integer threshold = null;
 
@@ -50,12 +49,14 @@ public final class Config {
 
             if (START_DATE.equals(tuple[0])) {
 
-                DateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
-
                 try {
-                    startDate = dateFormat.parse(tuple[1]);
-                } catch (ParseException ex) {
-                    throw new ConfigFailedException("Invalid format for startDate param", ex);
+
+                    startDate = LocalDateTime.parse(tuple[1], DateTimeFormatter.ofPattern(DATE_PATTERN));
+
+                } catch (Exception e) {
+
+                    throw new ConfigFailedException("Invalid startDate param", e);
+
                 }
 
                 continue;
@@ -97,23 +98,23 @@ public final class Config {
                 }
             }
         }
-        
-        if(startDate == null){
+
+        if (startDate == null) {
             throw new ConfigFailedException("Missing --startDate param");
         }
-        
-        if(duration == null){
+
+        if (duration == null) {
             throw new ConfigFailedException("Missing --duration param");
-        }        
-        
-        if(threshold == null){
+        }
+
+        if (threshold == null) {
             throw new ConfigFailedException("Missing --threshold param");
         }
 
         return new Config(accessLog, startDate, duration, threshold);
     }
 
-    private Config(File file, Date startDate, Duration duration, Integer threshold) {
+    private Config(File file, LocalDateTime startDate, Duration duration, Integer threshold) {
         this.accessLog = file;
         this.startDate = startDate;
         this.duration = duration;
@@ -124,7 +125,7 @@ public final class Config {
         return accessLog;
     }
 
-    Date getStartDate() {
+    LocalDateTime getStartDate() {
         return startDate;
     }
 
@@ -134,26 +135,5 @@ public final class Config {
 
     Integer getThreshold() {
         return threshold;
-    }
-
-    static enum Duration {
-        HOURLY("hourly"), DAILY("daily");
-
-        private final String value;
-
-        private Duration(String value) {
-            this.value = value;
-        }
-
-        static final Duration parse(String value) {
-
-            for (Duration duration : values()) {
-                if (duration.value.equals(value)) {
-                    return duration;
-                }
-            }
-
-            return null;
-        }
     }
 }
