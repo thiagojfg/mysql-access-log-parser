@@ -12,9 +12,9 @@ public class AccessLogFileLoaderTest {
     @Test
     public void loadAccessLogFile() throws IOException {
 
-        AccessLogFileLoader accessLogFilePersister = new AccessLogFileLoader(new File("src/test/resources/access.log"));
+        AccessLogFileLoader logFileLoader = new AccessLogFileLoader(new File("src/test/resources/access.log"));
 
-        List<AccessLog> logs = accessLogFilePersister.load();
+        List<AccessLog> logs = logFileLoader.load();
 
         assertNotNull(logs);
         assertFalse(logs.isEmpty());
