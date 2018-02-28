@@ -15,7 +15,7 @@ public class ConfigTest {
         assertNotNull(config);
         assertNotNull(config.getAccessLog());
         assertNotNull(config.getStartDate());
-        assertEquals(Duration.HOURLY, config.getDuration());
+        assertEquals(Duration.DAILY, config.getDuration());
         assertEquals(Long.valueOf(100), Long.valueOf(config.getThreshold()));
     }
 
